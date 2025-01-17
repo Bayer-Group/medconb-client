@@ -1,0 +1,24 @@
+name: Lint and Build
+
+on: push
+
+jobs:
+  lint_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository 🛎️
+        uses: actions/checkout@v4
+      - name: Install Python 3.10 🐍
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Set up runner 📦
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: "Black: Code Formatting 👮🏽‍♀️"
+        run: black --check medconb_client.py
+      - name: "Pylama: Linting 🧹"
+        run: ruff check medconb_client.py
+      - name: "Mypy: Type checking 👮🏽‍♀️"
+        run: mypy medconb_client.py
+      - name: Build 🏗️
+        run: python -m build

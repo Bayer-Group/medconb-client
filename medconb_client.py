@@ -1,15 +1,13 @@
 import logging
-from dataclasses import dataclass
-from typing import Optional, overload, Callable
 from collections import UserList
-from uuid import UUID
+from dataclasses import dataclass
+from typing import Optional, overload
 
-from pydantic import BaseModel
 import pandas as pd
-from gql import Client as GQLClient, gql
-from gql.transport.requests import RequestsHTTPTransport
+from gql import Client as GQLClient
+from gql import gql
 from gql.transport.aiohttp import AIOHTTPTransport
-from msal import PublicClientApplication
+from pydantic import BaseModel
 
 
 class Workspace(BaseModel):
@@ -279,7 +277,8 @@ class Client:
             mode = "phenotype"
         else:
             raise ValueError(
-                "Invalid arguments: Specify either codelist_collection_name or phenotype_collection_name and phenotype_name"
+                "Invalid arguments: Specify either codelist_collection_name or"
+                " phenotype_collection_name and phenotype_name"
             )
 
         candidates = await self._search_codelist(codelist_name)

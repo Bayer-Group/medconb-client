@@ -6,3 +6,8 @@ mkdocs-gen-files
 mkdocs-literate-nav
 mkdocs-jupyter
 mkdocs-glightbox
+black
+ruff
+mypy
+pandas-stubs
+build
