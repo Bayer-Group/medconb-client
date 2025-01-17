@@ -21,15 +21,15 @@ jobs:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - name: Checkout Repository 🛎️
-        uses: actions/checkout@v3
-      - name: Install Python 3.12 🐍
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
+      - name: Install Python 3.10 🐍
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.10"
       - name: Clean old build artifacts
         run: rm -rf dist/*
       - name: Build deps
-        run: python3 -m pip install -r requirements.txt && pip install wheel
+        run: python3 -m pip install -r requirements.txt -r requirements-dev.txt
       - name: Build artifacts
         run: python -m build
       - name: Publish package distributions to PyPI
