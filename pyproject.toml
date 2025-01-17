@@ -1,6 +1,6 @@
 [project]
 name = "medconb-client"
-version = "0.0.2-alpha1"
+version = "0.0.2"
 authors = [
     {name = "Alexander Vowinkel", email = "alexander.vowinkel@gmail.com"},
 ]
