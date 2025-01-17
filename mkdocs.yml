@@ -1,0 +1,47 @@
+site_name: Medconb Client
+site_description: "A Python library for communicating with MedConB."
+repo_url: "https://github.com/Bayer-Group/medconb-client"
+repo_name: "Bayer-Group/medconb-client"
+site_dir: "site"
+watch: [mkdocs.yml, README.md, CONTRIBUTING.md, medconb_client.py]
+copyright: Copyright &copy; 2024 Bayer AG
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Examples / How-To: examples.md
+  - API reference: reference/
+  - License: license.md
+
+markdown_extensions:
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search
+  # - mkdocs-jupyter
+  - glightbox
+  - gen-files:
+      scripts:
+        - scripts/gen_ref_nav.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: "google"
+            heading_level: 1
+            merge_init_into_class: true
+            # show_source: false
+
+theme:
+  name: material
+  palette:
+    primary: red
+  features:
+    - content.code.copy

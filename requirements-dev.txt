@@ -1,0 +1,8 @@
+devtools
+mkdocs
+mkdocs-material
+mkdocstrings[python]
+mkdocs-gen-files
+mkdocs-literate-nav
+mkdocs-jupyter
+mkdocs-glightbox

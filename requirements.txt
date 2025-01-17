@@ -1,0 +1,6 @@
+pandas
+pydantic
+aiohttp
+gql
+msal
+requests_toolbelt
