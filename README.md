@@ -1,5 +1,8 @@
 # MedConB Client
 
+[![Documentation](https://img.shields.io/badge/Documentation-526CFE?logo=MaterialForMkDocs&logoColor=white)](https://bayer-group.github.io/medconb-client/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 This library provides a Python interface to the MedConB API. With this you can easily retrieve whole codelists from MedConB.
 
 ## Installation
