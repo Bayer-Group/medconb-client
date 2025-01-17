@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: [self-hosted, Linux, external-k8s]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository 🛎️
