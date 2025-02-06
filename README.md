@@ -36,14 +36,14 @@ with that client you can now interact with the API.
 ### Get a codelist by name
 
 ```python
-codelist = await client.get_codelist_by_name(
+codelist = client.get_codelist_by_name(
     codelist_name="Coronary Artery Disease",
     codelist_collection_name="Pacific AF [Sample]",
 )
 ```
 
 ```python
-codelist = await client.get_codelist_by_name(
+codelist = client.get_codelist_by_name(
     codelist_name="Coronary Artery Disease",
     phenotype_collection_name="[Sample] PACIFIC AF ECA",
     phenotype_name="Coronary Artery Disease",
@@ -53,7 +53,7 @@ codelist = await client.get_codelist_by_name(
 ### Get a codelist by id
 
 ```python
-codelist = await client.get_codelist(
+codelist = client.get_codelist(
     codelist_id="9c4ad312-3008-4d95-9b16-6f9b21ec1ad9"
 )
 ```
@@ -61,7 +61,7 @@ codelist = await client.get_codelist(
 ### Retrieve collections in your workspace
 
 ```python
-workspace_info = await client.get_workspace()
+workspace_info = client.get_workspace()
 
 collection_info = next(
     collection
@@ -69,7 +69,7 @@ collection_info = next(
     if collection.itemType == "Codelist"
 )
 
-codelist = await client.get_codelist(collection_info.items[0].id)
+codelist = client.get_codelist(collection_info.items[0].id)
 ```
 
 For more information, also see our [Examples Page](https://refactored-adventure-kgjn1rq.pages.github.io/examples/).

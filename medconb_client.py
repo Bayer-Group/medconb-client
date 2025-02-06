@@ -6,7 +6,7 @@ from typing import Optional, overload
 import pandas as pd
 from gql import Client as GQLClient
 from gql import gql
-from gql.transport.aiohttp import AIOHTTPTransport
+from gql.transport.requests import RequestsHTTPTransport
 from pydantic import BaseModel
 
 
@@ -121,8 +121,10 @@ class Client:
         """
         self.endpoint = endpoint
         self.token = token
-        self.transport = AIOHTTPTransport(
-            url=self.endpoint, headers={"Authorization": f"Bearer {self.token}"}
+        self.transport = RequestsHTTPTransport(
+            url=self.endpoint,
+            headers={"Authorization": f"Bearer {self.token}"},
+            retries=3,
         )
         self.client = GQLClient(
             transport=self.transport,
@@ -130,7 +132,7 @@ class Client:
             execute_timeout=30,
         )
 
-    async def get_workspace(self) -> Workspace:
+    def get_workspace(self) -> Workspace:
         """
         Retrieves a listing of all collections and their codelists/pheontypes
         within the workspace.
@@ -141,7 +143,7 @@ class Client:
         Example:
             For a detailed example, see [Examples](/examples#list-all-collections-in-your-workspace).
             ```ipython
-            >>> workspace = await client.get_workspace()
+            >>> workspace = client.get_workspace()
             >>> print(workspace)
             Workspace(
                 collections=[
@@ -170,12 +172,12 @@ class Client:
         """
         query = gql(_GQL_QUERY_WORKSPACE)
 
-        async with self.client as session:
-            result = await session.execute(query)
+        with self.client as session:
+            result = session.execute(query)
             workspace_data = result["self"]["workspace"]
             return Workspace(**workspace_data)
 
-    async def get_codelist(
+    def get_codelist(
         self, codelist_id: str, with_description: bool = False
     ) -> "Codelist":
         """
@@ -195,10 +197,8 @@ class Client:
             else _GQL_QUERY_CODELST_NO_DESCRIPTION
         )
 
-        async with self.client as session:
-            result = await session.execute(
-                query, variable_values={"codelistID": codelist_id}
-            )
+        with self.client as session:
+            result = session.execute(query, variable_values={"codelistID": codelist_id})
             codelist_data = result["codelist"]
 
             css = codelist_data["codesets"]
@@ -239,7 +239,7 @@ class Client:
         self, *, codelist_name: str, phenotype_collection_name: str, phenotype_name: str
     ): ...
 
-    async def get_codelist_by_name(
+    def get_codelist_by_name(
         self,
         *,
         codelist_name,
@@ -281,7 +281,7 @@ class Client:
                 " phenotype_collection_name and phenotype_name"
             )
 
-        candidates = await self._search_codelist(codelist_name)
+        candidates = self._search_codelist(codelist_name)
         matches = []
 
         if mode == "collection":
@@ -303,7 +303,7 @@ class Client:
                 "The codelist can not be retrieved because it was not found"
             )
 
-        return await self.get_codelist(matches[0])
+        return self.get_codelist(matches[0])
 
     def _filter_codelist_in_phenotype(
         self,
@@ -369,13 +369,13 @@ class Client:
 
         return matches
 
-    async def _search_codelist(self, codelist_name: str) -> list[dict]:
+    def _search_codelist(self, codelist_name: str) -> list[dict]:
         query = gql(_GQL_QUERY_SEARCH_CODELIST)
 
         query_str = f"name:'^{codelist_name}$' visibility:'public,shared,own'"
 
-        async with self.client as session:
-            result = await session.execute(query, variable_values={"query": query_str})
+        with self.client as session:
+            result = session.execute(query, variable_values={"query": query_str})
             return result["searchEntities"]["items"]
 
 

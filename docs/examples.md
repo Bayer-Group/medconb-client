@@ -29,7 +29,7 @@ client = Client(endpoint, token)
 To retrieve a codelist, use the [`get_codelist`][medconb_client.Client.get_codelist] method:
 
 ```python
-codelist = await client.get_codelist(
+codelist = client.get_codelist(
     codelist_id="9c4ad312-3008-4d95-9b16-6f9b21ec1ad9"
 )
 
@@ -66,7 +66,7 @@ Each codeset has the attributes `ontology` and `codes`. The latter is a list of 
 You can also get a codelist by name. As the name is not unique in the whole workspace, you have to specify the location of the codelist by e.g. specifying the name of the collection it is in.
 
 ```python
-codelist = await client.get_codelist_by_name(
+codelist = client.get_codelist_by_name(
     codelist_name="Coronary Artery Disease",
     codelist_collection_name="Pacific AF [Sample]",
 )
@@ -75,7 +75,7 @@ codelist = await client.get_codelist_by_name(
 If the codelist is part of a Phenotype, use the name of the phenotype and the name of the phenotype collection:
 
 ```python
-codelist = await client.get_codelist_by_name(
+codelist = client.get_codelist_by_name(
     codelist_name="Coronary Artery Disease",
     phenotype_collection_name="[Sample] PACIFIC AF ECA",
     phenotype_name="Coronary Artery Disease",
@@ -87,7 +87,7 @@ codelist = await client.get_codelist_by_name(
 You can get an overview of your workspace by using [`client.get_workspace`][medconb_client.Client.get_workspace]. The result will be an object of [`Workspace`][medconb_client.Workspace], containing all collectons (own and shared) with stub information (id and name) on the contained codelists/phenotypes.
 
 ```python
-workspace_info = await client.get_workspace()
+workspace_info = client.get_workspace()
 
 # get first collection of codelists (skip phenotypes)
 collection_info = next(
@@ -96,7 +96,7 @@ collection_info = next(
     if collection.itemType == "Codelist"
 )
 
-codelist = await client.get_codelist(collection_info.items[0].id)
+codelist = client.get_codelist(collection_info.items[0].id)
 ```
 
 ## A codelist as a Pandas DataFrame
