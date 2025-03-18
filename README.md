@@ -10,8 +10,6 @@ This library provides a Python interface to the MedConB API. With this you can e
 
 ## Installation
 
-This package is not yet published to pipy.
-
 You can install (and update) it into your python environment by running:
 
 ```
