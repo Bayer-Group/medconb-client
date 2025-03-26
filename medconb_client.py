@@ -11,11 +11,38 @@ from pydantic import BaseModel
 
 
 class Workspace(BaseModel):
+    """
+    Workspace as defined in MedConB.
+
+    Attributes:
+        collections (list[Collection]): List of collections in the
+            workspace owned by the user.
+        shared (list[Collection]): List of collections in the workspace
+            shared with the user.
+    """
+
     collections: Optional[list["Collection"]]
     shared: Optional[list["Collection"]]
 
 
 class Collection(BaseModel):
+    """
+    Collection as defined in MedConB.
+
+    Attributes:
+        id (str): ID of the collection.
+        name (str): Name of the collection.
+        description (str): Description of the collection.
+        referenceID (str): ID of the collection this one was copied from.
+        itemType (str): Type of the collections items.
+        items (list[CodelistInfo | PhenotypeInfo]): Basic information on
+            the items in this collection.
+        ownerID (str): ID of the owner of the collection.
+        locked (bool): Whether the collection is locked.
+        visibility (str): Visibility of the collection. Can be "own",
+            "shared" or "public".
+    """
+
     id: str
     name: str
     description: Optional[str]
@@ -28,11 +55,27 @@ class Collection(BaseModel):
 
 
 class CodelistInfo(BaseModel):
+    """
+    Basic information on a codelist as defined in MedConB.
+
+    Attributes:
+        id (str): ID of the codelist.
+        name (str): Name of the codelist.
+    """
+
     id: str
     name: str
 
 
 class PhenotypeInfo(BaseModel):
+    """
+    Basic information on a phenotype as defined in MedConB.
+
+    Attributes:
+        id (str): ID of the phenotype.
+        name (str): Name of the phenotype.
+    """
+
     id: str
     name: str
 
