@@ -1,6 +1,6 @@
 [project]
 name = "medconb-client"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
     {name = "Alexander Vowinkel", email = "alexander.vowinkel@gmail.com"},
 ]
@@ -8,10 +8,10 @@ description = "medconb-client is a Python client for the MedConB API."
 readme = "README.md"
 requires-python = ">=3.9"
 keywords = ["medconb", "client", "api", "python"]
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 
