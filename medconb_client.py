@@ -151,8 +151,20 @@ class Codeset:
 
 
 class SearchMatchingType(Enum):
-    Exact = 1
-    Substring = 2
+    """
+    Types of matching to use when searching the public marketplace.
+
+    **Enum Members:**
+
+    Enum Name   | Description
+    ------------|------------
+    `EXACT`     | Search for an exact match.
+    `SUBSTRING` | Search for a substring match.
+
+    """
+
+    EXACT = 1
+    SUBSTRING = 2
 
 
 class Client:
@@ -357,7 +369,7 @@ class Client:
     def search_public_codelists(
         self,
         codelist_name: str,
-        matching_type: SearchMatchingType = SearchMatchingType.Exact,
+        matching_type: SearchMatchingType = SearchMatchingType.EXACT,
     ) -> list[dict]:
         """
         Searches the public marketplace for codelists.
@@ -393,9 +405,9 @@ class Client:
         match (matching_type, len(codelist_name)):
             case (_, 0):
                 query_partial = ""
-            case (SearchMatchingType.Exact, _):
+            case (SearchMatchingType.EXACT, _):
                 query_partial = f"^{codelist_name}$"
-            case (SearchMatchingType.Substring, _):
+            case (SearchMatchingType.SUBSTRING, _):
                 query_partial = f"name:'{codelist_name}'"
 
         query_str = f"{query_partial} visibility:'public'"
