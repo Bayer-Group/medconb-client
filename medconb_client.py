@@ -1,6 +1,7 @@
 import logging
 from collections import UserList
 from dataclasses import dataclass
+from enum import Enum
 from typing import Optional, overload
 
 import pandas as pd
@@ -147,6 +148,11 @@ class Codeset:
 
     ontology: str
     codes: list[tuple[str, str]]  # code, description
+
+
+class SearchMatchingType(Enum):
+    Exact = 1
+    Substring = 2
 
 
 class Client:
@@ -347,6 +353,56 @@ class Client:
             )
 
         return self.get_codelist(matches[0])
+
+    def search_public_codelists(
+        self,
+        codelist_name: str,
+        matching_type: SearchMatchingType = SearchMatchingType.Exact,
+    ) -> list[dict]:
+        """
+        Searches the public marketplace for codelists.
+
+        Args:
+            codelist_name (str): Name of the codelist to search for.
+            matching_type (SearchMatchingType, optional): Type of matching to use.
+                Defaults to SearchMatchingType.Exact.
+
+        Returns:
+            list[dict]: List of codelists that match the search.
+
+        A result dict has the following structure:
+        ```json
+        {
+            "id": "codelist-id",
+            "name": "codelist-name",
+            "containerHierarchy": [
+                {
+                    "type": "Collection",
+                    "name": "collection-name"
+                },
+                {
+                    "type": "Phenotype",
+                    "name": "phenotype-name"
+                }
+            ]
+        }
+        ```
+        """
+        query = gql(_GQL_QUERY_SEARCH_CODELIST)
+
+        match (matching_type, len(codelist_name)):
+            case (_, 0):
+                query_partial = ""
+            case (SearchMatchingType.Exact, _):
+                query_partial = f"^{codelist_name}$"
+            case (SearchMatchingType.Substring, _):
+                query_partial = f"name:'{codelist_name}'"
+
+        query_str = f"{query_partial} visibility:'public'"
+
+        with self.client as session:
+            result = session.execute(query, variable_values={"query": query_str})
+            return result["searchEntities"]["items"]
 
     def _filter_codelist_in_phenotype(
         self,
