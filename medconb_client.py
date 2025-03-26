@@ -175,7 +175,7 @@ class Client:
             execute_timeout=30,
         )
 
-    def get_workspace(self) -> Workspace:
+    def get_workspace(self) -> "Workspace":
         """
         Retrieves a listing of all collections and their codelists/pheontypes
         within the workspace.
@@ -289,7 +289,7 @@ class Client:
         codelist_collection_name=None,
         phenotype_collection_name=None,
         phenotype_name=None,
-    ):
+    ) -> "Codelist":
         """
         Retrieves a Codelist by its name.
 
