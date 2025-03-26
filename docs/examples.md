@@ -99,6 +99,22 @@ collection_info = next(
 codelist = client.get_codelist(collection_info.items[0].id)
 ```
 
+## Search the public marketplace for codelists
+
+The Medical Concept Builder has a marketplace where you can find all collections and phenotypes
+that were made available to all users. With [`client.search_public_codelists`][medconb_client.Client.search_public_codelists]
+you can search it for codelists.
+
+```python
+found_codelists = client.search_public_codelists(query="name:'blood'")
+```
+
+| query string   | description                                                        |
+| -------------- | ------------------------------------------------------------------ |
+| `blood`        | searches name and description for any (substring-)match of "blood" |
+| `name:blood`   | searches name for any (substring-)match of "blood"                 |
+| `name:'blood'` | finds "blood infusion" but not "Bloody Nose"                       |
+
 ## A codelist as a Pandas DataFrame
 
 You can easily convert a codelist into a Pandas DataFrame with the columns "ontology", "code", "description":

@@ -160,7 +160,6 @@ class SearchMatchingType(Enum):
     ------------|------------
     `EXACT`     | Search for an exact match.
     `SUBSTRING` | Search for a substring match.
-
     """
 
     EXACT = 1
@@ -366,55 +365,34 @@ class Client:
 
         return self.get_codelist(matches[0])
 
-    def search_public_codelists(
-        self,
-        codelist_name: str,
-        matching_type: SearchMatchingType = SearchMatchingType.EXACT,
-    ) -> list[dict]:
+    def search_public_codelists(self, query: str) -> list[CodelistInfo]:
         """
         Searches the public marketplace for codelists.
 
         Args:
-            codelist_name (str): Name of the codelist to search for.
-            matching_type (SearchMatchingType, optional): Type of matching to use.
-                Defaults to SearchMatchingType.Exact.
+            query (str): A query string similar to a google search.
 
         Returns:
-            list[dict]: List of codelists that match the search.
+            list[CodelistInfo]: List of codelists that match the search.
 
-        A result dict has the following structure:
-        ```json
-        {
-            "id": "codelist-id",
-            "name": "codelist-name",
-            "containerHierarchy": [
-                {
-                    "type": "Collection",
-                    "name": "collection-name"
-                },
-                {
-                    "type": "Phenotype",
-                    "name": "phenotype-name"
-                }
-            ]
-        }
-        ```
+        All search is case-insensitive.
+
+        The search by default searches name and description for the
+        search terms. By using "name:search-term" you can search
+        a specific field (name in this case).
+        To only consider exact matches of a word, use
+        "name:'blood'". This will find results like "Blood Infusion",
+        but not "bloody nose".
         """
-        query = gql(_GQL_QUERY_SEARCH_CODELIST)
+        gql_query = gql(_GQL_QUERY_SEARCH_CODELIST)
 
-        match (matching_type, len(codelist_name)):
-            case (_, 0):
-                query_partial = ""
-            case (SearchMatchingType.EXACT, _):
-                query_partial = f"^{codelist_name}$"
-            case (SearchMatchingType.SUBSTRING, _):
-                query_partial = f"name:'{codelist_name}'"
-
-        query_str = f"{query_partial} visibility:'public'"
+        query_str = f"{query} visibility:'public'"
 
         with self.client as session:
-            result = session.execute(query, variable_values={"query": query_str})
-            return result["searchEntities"]["items"]
+            result = session.execute(gql_query, variable_values={"query": query_str})
+            items = result["searchEntities"]["items"]
+            res = [CodelistInfo(id=i["id"], name=i["name"]) for i in items]
+            return res
 
     def _filter_codelist_in_phenotype(
         self,
